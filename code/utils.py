@@ -19,9 +19,11 @@ def crop_center(img, frac):
 def score_ncc(a, b) -> float:
     a = a.astype(np.float32, copy=False)
     b = b.astype(np.float32, copy=False)
-    # dot(a, b) / (||a|| * ||b||)
-    num   = float((a * b).sum())
-    den   = ( (a*a).sum()**0.5 * (b*b).sum()**0.5 ) + 1e-8
+    a = a - a.mean()
+    b = b - b.mean()
+    num = float((a * b).sum())
+    den = ((a * a).sum()**0.5 * (b * b).sum()**0.5) + 1e-8
+
     return num / den
 
 def align_single(img1, img2, win, crop_frac=0.15, use_grad=False):

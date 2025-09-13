@@ -30,25 +30,25 @@ def run_one(im_path: Path, out_path: Path, win: int = 15, crop_frac: float = 0.1
     if use_pyramid:
         print("Aligning with PYRAMID (gradients)…")
         dG = align_pyramid(B, G, levels=None, base_win=12, refine_win=3,
-                           crop_frac=0.15, scale=2, use_grad=True)
+                           crop_frac=0.15, scale=2, use_grad=False)
         dR = align_pyramid(B, R, levels=None, base_win=12, refine_win=3,
-                           crop_frac=0.15, scale=2, use_grad=True)
+                           crop_frac=0.15, scale=2, use_grad=False)
     else:
         print("Aligning with SINGLE-SCALE (gradients)…")
-        dG = align_single(B, G, win=win, crop_frac=crop_frac, use_grad=True)
-        dR = align_single(B, R, win=win, crop_frac=crop_frac, use_grad=True)
+        dG = align_single(B, G, win=win, crop_frac=crop_frac, use_grad=False)
+        dR = align_single(B, R, win=win, crop_frac=crop_frac, use_grad=False)
 
     print(f"Offsets  G(dy,dx)={dG}  R(dy,dx)={dR}")
 
     # 4) apply shifts
-    G_shift = apply_shift(G, dG)   # optional: switch to apply_shift_clip to avoid wrap borders
+    G_shift = apply_shift(G, dG)   
     R_shift = apply_shift(R, dR)
 
     # 5) stack RGB and save
     rgb = np.stack([R_shift, G_shift, B], axis=2)
     rgb = np.nan_to_num(rgb, nan=0.0, posinf=1.0, neginf=0.0)
 
-    # small final crop to clean scan edges / residual fringing
+    # small final crop to clean scan edges
     rgb = crop_border(rgb, frac=0.06)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -59,6 +59,6 @@ def run_one(im_path: Path, out_path: Path, win: int = 15, crop_frac: float = 0.1
 
 
 if __name__ == "__main__":
-    in_file  = ROOT / "data" / "example3.tif"
-    out_file = ROOT / "results" / "example3_rgb.jpg"
+    in_file  = ROOT / "data" / "emir.tif" #input file here replace image_name 
+    out_file = ROOT / "results" / "emir_rgb.jpg" #output file here replace image name
     run_one(in_file, out_file, win=15, crop_frac=0.15)
