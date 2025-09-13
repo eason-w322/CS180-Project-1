@@ -30,13 +30,13 @@ def run_one(im_path: Path, out_path: Path, win: int = 15, crop_frac: float = 0.1
     if use_pyramid:
         print("Aligning with PYRAMID (gradients)…")
         dG = align_pyramid(B, G, levels=None, base_win=12, refine_win=3,
-                           crop_frac=0.15, scale=2, use_grad=False)
+                           crop_frac=0.15, scale=2, use_grad=True)
         dR = align_pyramid(B, R, levels=None, base_win=12, refine_win=3,
-                           crop_frac=0.15, scale=2, use_grad=False)
+                           crop_frac=0.15, scale=2, use_grad=True)
     else:
         print("Aligning with SINGLE-SCALE (gradients)…")
-        dG = align_single(B, G, win=win, crop_frac=crop_frac, use_grad=False)
-        dR = align_single(B, R, win=win, crop_frac=crop_frac, use_grad=False)
+        dG = align_single(B, G, win=win, crop_frac=crop_frac, use_grad=True)
+        dR = align_single(B, R, win=win, crop_frac=crop_frac, use_grad=True)
 
     print(f"Offsets  G(dy,dx)={dG}  R(dy,dx)={dR}")
 
@@ -60,5 +60,5 @@ def run_one(im_path: Path, out_path: Path, win: int = 15, crop_frac: float = 0.1
 
 if __name__ == "__main__":
     in_file  = ROOT / "data" / "emir.tif" #input file here replace image_name 
-    out_file = ROOT / "results" / "emirblurry_rgb.jpg" #output file here replace image name
+    out_file = ROOT / "results" / "emir_rgb.jpg" #output file here replace image name
     run_one(in_file, out_file, win=15, crop_frac=0.15)
