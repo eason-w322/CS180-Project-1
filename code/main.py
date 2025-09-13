@@ -59,6 +59,6 @@ def run_one(im_path: Path, out_path: Path, win: int = 15, crop_frac: float = 0.1
 
 
 if __name__ == "__main__":
-    in_file  = ROOT / "data" / "tobolsk.jpg"
-    out_file = ROOT / "results" / "tobolsk_rgb.jpg"
+    in_file  = ROOT / "data" / "self_portrait.tif"
+    out_file = ROOT / "results" / "self_portrait_rgb.jpg"
     run_one(in_file, out_file, win=15, crop_frac=0.15)
